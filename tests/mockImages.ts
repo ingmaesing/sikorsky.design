@@ -2,9 +2,9 @@ import type { Page, Route } from "@playwright/test";
 
 export async function mockImages(page: Page) {
   await page.route("**/*.{png,jpg,jpeg,webp,svg,gif,ico,avif}", async (route: Route) => {
-    // Astro serves local optimized images at /_astro/ in production. Keep them
-    // real, just like the /_image responses used by the development server.
-    if (new URL(route.request().url()).pathname.startsWith("/_astro/")) {
+    // Keep local assets, including the navigation logo and optimized images.
+    // Only external image services are mocked.
+    if (new URL(route.request().url()).origin === new URL(page.url()).origin) {
       await route.continue();
       return;
     }

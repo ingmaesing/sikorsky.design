@@ -40,10 +40,18 @@ Ordinary startup uses the published package. Production builds reject the local 
 
 ## Adopt a theme release
 
-Dependabot checks `@sikorsky/site` daily and opens an update PR. Detection is scheduled,
-not immediate. Review its changelog, build checks, and the host's deployment preview
-when available, then merge manually. Preview hosting is configured in the hosting service;
-its availability has not been verified by this change.
+From the sibling `sikorsky-site` checkout, run:
+
+```sh
+npm run upgrade:sites -- --version 0.5.4
+```
+
+Use the desired published version. Both website checkouts must be clean and on `main`.
+The command installs that exact version, builds and tests both sites sequentially,
+then commits their dependency files only after both pass. It never updates snapshots
+or pushes automatically. Review the two commits and push each `main` branch to deploy.
+If validation fails, changes remain uncommitted for inspection; fix the issue or
+restore the dependency files and run `npm ci` before retrying from clean checkouts.
 
 To check an unpublished package against both sites, run `npm run check:consumers` from
 the theme checkout. It builds temporary copies and leaves this checkout unchanged.
