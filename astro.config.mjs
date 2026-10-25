@@ -1,13 +1,13 @@
-import { defineConfig } from "astro/config";
-import { themeIntegration } from "@sikorsky/site";
-import themeConfig from "./theme.config";
+import { defineConfig } from 'astro/config';
+import { themeIntegration } from '@sikorsky/site';
+import themeConfig from './theme.config';
+import { localTheme } from './scripts/local-theme.mjs';
 
-// https://astro.build/config
+const local = await localTheme();
 export default defineConfig({
-  integrations: [themeIntegration({ config: themeConfig })],
+  integrations: [(local?.themeIntegration ?? themeIntegration)({ config: themeConfig })],
   vite: {
-    ssr: {
-      noExternal: ["firebase"]
-    }
-  }
+    ...local?.vite,
+    ssr: { noExternal: ['firebase'] },
+  },
 });

@@ -12,11 +12,13 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
-        node-version: lts/*
+        node-version-file: '.nvmrc'
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    - name: Build production site
+      run: npm run build
     - name: Run Playwright tests
       run: npx playwright test
     - uses: actions/upload-artifact@v4
